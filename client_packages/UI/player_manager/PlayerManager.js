@@ -1,55 +1,63 @@
-﻿Event.OnEntityStreamIn.connect(function (ent, entType) {
-    if (entType == 6 || entType == 8) {
-        API.triggerServerEvent("update_ped_for_client", ent);
-    }
+﻿mp.events.add('entityStreamIn', (entity) => {
+	if(entity.type == 6 || entity.type == 8){
+		mp.events.callRemote('update_ped_for_client', entity);
+	}
 });
 
-var player_money = null;
-var jail_time = 0;
-var garbage_timer = 0;
-var mark = null;
+let player_money = null;
+let jail_time = 0;
+let garbage_timer = 0;
+let mark = null;
+let carWaypoint = null;
 
-Event.OnServerEventTrigger.connect(function (eventName, args) {
-    switch (eventName) {
-        case "update_money_display": {
-            player_money = args[0];
-            break;
-        }
-
-		case "update_jail_time": {
-			jail_time = args[0];
-			break;
-		}
-
-		case "update_garbage_time": {
-			garbage_timer = args[0];
-			break;
-		}
-
-        case "dropcar_setwaypoint":
-		    var location = args[0];
-            API.setWaypoint(location.X, location.Y);   
-			mark = API.createMarker(1, location, new Vector3(), new Vector3(), new Vector3(1, 1, 1), 255, 0, 0, 255);
-            break;
-
-		case "dropcar_removewaypoint":
-			API.removeWaypoint();
-			API.deleteEntity(mark) ;
-			break;
-    }
+//	maybe use addEventHandler
+mp.events.add('update_money_display', (money) => {
+	player_money = parseInt(money);
 });
 
-Event.OnUpdate.connect(function () {
-    if(player_money != null && !resource.Introduction.isonintro){
-        API.drawText("~g~$~w~" + player_money, API.getScreenResolutionMaintainRatio().Width - 15, 100, 1, 115, 186, 131, 255, 4, 2, false, true, 0);
-    }
+mp.events.add('update_jail_time', (jailTime) => {
+	jail_time = parseInt(jailTime);
+});
+
+mp.events.add('update_garbage_time', (garbageTime) => {
+	garbage_timer = parseInt(garbageTime);
+});
+
+mp.events.add('dropcar_setwaypoint', (location) => {
+	carWaypoint = mp.blips.new(8, location,
+	{
+		name: 'Drop car',
+		shortRange: false,
+	});
+	carWaypoint.setRoute(true);
+	mark = mp.markers.new(1, location, 1, { color: [255, 0, 0, 255] });
+});
+
+mp.events.add('dropcar_removewaypoint', () => {
+	carWaypoint.setRoute(false);
+	carWaypoint.destroy();
+	mark.destroy();
+})
+
+mp.events.add('render', () => {
+	if(player_money != null){	//	This also had '&& !resource.Introduction.isonintro' to compare, unsure what this is
+		mp.game.graphics.drawText(`~g~$~w~${player_money}`, [0.8, 0.005], { 
+			font: 1, 
+			scale: [1.2, 1.2]
+		});
+	}
 
 	if(jail_time > 0){
-		API.drawText("~r~JAIL TIME LEFT: ~w~" + jail_time, API.getScreenResolutionMaintainRatio().Width - 15, 160, 1, 115, 186, 131, 255, 4, 2, false, true, 0);
+		mp.game.graphics.drawText(`~r~JAIL TIME LEFT: ~w~${jail_time}`, [0.5, 0.005], { 
+			font: 1, 
+			scale: [1.2, 1.2]
+		});
 	}
 
 	if(garbage_timer > 0){
-		API.drawText("~r~GARBAGE TIME LEFT: ~w~" + garbage_timer, API.getScreenResolutionMaintainRatio().Width - 15, 160, 1, 115, 186, 131, 255, 4, 2, false, true, 0);
+		mp.game.graphics.drawText(`~r~GARBAGE TIME LEFT: ~w~${garbage_timer}`, [0.5, 0.005], { 
+			font: 1, 
+			scale: [1.2, 1.2]
+		});
 	}
-    //API.dxDrawTexture("/cef_resources/MTGVRP_LOGO_SMALL.png", new Point(API.getScreenResolutionMaintainRatio().Width - 100, 0), new Size(100, 100), 0);
 });
