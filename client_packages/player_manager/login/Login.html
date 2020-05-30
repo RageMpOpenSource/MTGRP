@@ -97,7 +97,7 @@
             return;
         }
         
-        resourceCall("attempt_login", password);
+        mp.trigger("attempt_login", password);
     }
 
     function update_box_info(username, is_registered) {
