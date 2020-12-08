@@ -188,7 +188,7 @@ namespace mtgvrp.job_manager.hunting
                 {
                     if (player.Position.DistanceTo(NAPI.Entity.GetEntityPosition(a.handle)) < 2.0)
                     {
-                        bool isDead = API.FetchNativeFromPlayer<bool>(player, Hash.IS_PED_DEAD_OR_DYING, a, 1);
+                        bool isDead = NAPI.Native.FetchNativeFromPlayer<bool>(player, Hash.IS_PED_DEAD_OR_DYING, a, 1);
                         if (isDead)
                         {
                             var animalItem = new AnimalItem();
@@ -241,7 +241,7 @@ namespace mtgvrp.job_manager.hunting
                 {
                     if (player.Position.DistanceTo(NAPI.Entity.GetEntityPosition(a.handle)) < 2.0)
                     {
-                        bool isDead = API.FetchNativeFromPlayer<bool>(player, Hash.IS_PED_DEAD_OR_DYING, a, 1);
+                        bool isDead = NAPI.Native.FetchNativeFromPlayer<bool>(player, Hash.IS_PED_DEAD_OR_DYING, a, 1);
                         if (isDead)
                         {
                             var animalItem = new AnimalItem();
@@ -400,7 +400,7 @@ namespace mtgvrp.job_manager.hunting
 
         public void AnimalAi(HuntingAnimal animal)
         {
-            API.Shared.SetEntityPositionFrozen(handle, false);
+            // API.Shared.SetEntityPositionFrozen(handle, false);
 
             List<Player> playersInRadius = new List<Player>();
 
@@ -489,7 +489,7 @@ namespace mtgvrp.job_manager.hunting
                 case HuntingManager.AnimalState.Fleeing:
                     foreach (var p in playersInRadius)
                     {
-                        API.Shared.SendNativeToPlayer(p, Hash.TASK_SMART_FLEE_PED, handle, FleeingPed, 75f, 5000, 0, 0);
+                        NAPI.Native.SendNativeToPlayer(p, Hash.TASK_SMART_FLEE_PED, handle, FleeingPed, 75f, 5000, 0, 0);
                     }
                     break;
                 case HuntingManager.AnimalState.Grazing:
@@ -500,7 +500,7 @@ namespace mtgvrp.job_manager.hunting
                 case HuntingManager.AnimalState.Wandering:
                     foreach (var p in playersInRadius)
                     {
-                        API.Shared.SendNativeToPlayer(p, Hash.TASK_WANDER_IN_AREA, handle, Destination.X,
+                        NAPI.Native.SendNativeToPlayer(p, Hash.TASK_WANDER_IN_AREA, handle, Destination.X,
                             Destination.Y, Destination.Z, 25, 0, 0);
                     }
                     break;

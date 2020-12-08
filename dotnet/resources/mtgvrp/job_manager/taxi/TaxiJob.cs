@@ -185,7 +185,7 @@ namespace mtgvrp.job_manager.taxi
 
         public void RespawnTaxi(Character character, GameVehicle veh)
         {
-            if (API.IsPlayerConnected(character.Player))
+            if (NAPI.Player.IsPlayerConnected(character.Player))
             {
                 NAPI.Chat.SendChatMessageToPlayer(character.Player, Color.Yellow, "[TAXI] You were out of your taxi for too long and have taken off-duty. The taxi has been respawned.");
 

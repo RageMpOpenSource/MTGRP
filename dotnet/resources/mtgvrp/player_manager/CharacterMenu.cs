@@ -178,7 +178,7 @@ namespace mtgvrp.player_manager
                     return;
                 }
 
-                API.SetPlayerSkin(player,
+                NAPI.Player.SetPlayerSkin(player,
                     character.Model.Gender == Character.GenderMale
                         ? PedHash.FreemodeMale01
                         : PedHash.FreemodeFemale01);
@@ -255,8 +255,8 @@ namespace mtgvrp.player_manager
             var parentLean = (float)arguments[4];
             var gender = (int)arguments[5];
 
-            player.TriggerEvent("CallNative", Hash.SET_PED_HEAD_BLEND_DATA, fatherPed, fatherIntId, fatherIntId, 0, fatherIntId, fatherIntId, 0, 1.0, 1.0, 0, false);
-            player.TriggerEvent("CallNative", Hash.SET_PED_HEAD_BLEND_DATA, motherPed, motherIntId, motherIntId, 0, motherIntId, motherIntId, 0, 1.0, 1.0, 0, false);
+            NAPI.Native.SendNativeToPlayer(player, Hash.SET_PED_HEAD_BLEND_DATA, fatherPed, fatherIntId, fatherIntId, 0, fatherIntId, fatherIntId, 0, 1.0, 1.0, 0, false);
+            NAPI.Native.SendNativeToPlayer(player, Hash.SET_PED_HEAD_BLEND_DATA, motherPed, motherIntId, motherIntId, 0, motherIntId, motherIntId, 0, 1.0, 1.0, 0, false);
 
             Character character = player.GetCharacter();
 
@@ -483,7 +483,7 @@ namespace mtgvrp.player_manager
             NAPI.Vehicle.SetVehicleEngineStatus(vehicle.Entity, true);
             SpawnedVehicles.Add(vehicle);
 
-            API.SendNativeToAllPlayers(Hash.TASK_VEHICLE_DRIVE_TO_COORD, player, vehicle.Entity, -582.3301, -2201.367, 56.25008, 120f, 1f, vehicle.GetHashCode(), 16777216, 1f, true);
+            NAPI.Native.SendNativeToAllPlayers(Hash.TASK_VEHICLE_DRIVE_TO_COORD, player, vehicle.Entity, -582.3301, -2201.367, 56.25008, 120f, 1f, vehicle.GetHashCode(), 16777216, 1f, true);
         }
 
         [RemoteEvent("bus_driving_station")]
@@ -496,7 +496,7 @@ namespace mtgvrp.player_manager
             NAPI.Vehicle.SetVehicleEngineStatus(vehicle.Entity, true);
             SpawnedVehicles.Add(vehicle);
 
-            API.SendNativeToAllPlayers(Hash.TASK_VEHICLE_DRIVE_TO_COORD, player, vehicle.Entity, 464.645, -673.3629, 27.20791, 10f, 1f, vehicle.GetHashCode(), 16777216, 1f, true);
+            NAPI.Native.SendNativeToAllPlayers(Hash.TASK_VEHICLE_DRIVE_TO_COORD, player, vehicle.Entity, 464.645, -673.3629, 27.20791, 10f, 1f, vehicle.GetHashCode(), 16777216, 1f, true);
         }
 
         [RemoteEvent("player_exiting_bus")]
@@ -509,7 +509,7 @@ namespace mtgvrp.player_manager
             NAPI.Vehicle.SetVehicleEngineStatus(vehicle.Entity, true);
             SpawnedVehicles.Add(vehicle);
 
-            API.SendNativeToAllPlayers(Hash.TASK_LEAVE_VEHICLE, player, vehicle.Entity, 0);
+            NAPI.Native.SendNativeToAllPlayers(Hash.TASK_LEAVE_VEHICLE, player, vehicle.Entity, 0);
         }*/
 
         [RemoteEvent("finish_intro")]

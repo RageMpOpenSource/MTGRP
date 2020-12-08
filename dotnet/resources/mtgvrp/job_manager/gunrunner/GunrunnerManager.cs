@@ -209,7 +209,7 @@ namespace mtgvrp.job_manager.gunrunner
                 {
                     string weapon = w.ToString().Trim();
 
-                    switch (InventoryManager.GiveInventoryItem(player.GetCharacter(), new WeaponCase(API.WeaponNameToModel(weapon), player.GetCharacter())))
+                    switch (InventoryManager.GiveInventoryItem(player.GetCharacter(), new WeaponCase(NAPI.Util.WeaponNameToModel(weapon), player.GetCharacter())))
                     {
                         case InventoryManager.GiveItemErrors.Success:
                             player.GetCharacter().WeaponsBought++;

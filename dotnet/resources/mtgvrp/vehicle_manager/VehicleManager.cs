@@ -265,18 +265,18 @@ namespace mtgvrp.vehicle_manager
             //Sync horns
             if (veh.GetVehicle()?.VehMods?.ContainsKey("14") ?? false)
             {
-                sender.TriggerEvent("CallNative", Hash.SET_VEHICLE_MOD, veh, 14,
+                NAPI.Native.SendNativeToPlayer(sender, Hash.SET_VEHICLE_MOD, veh, 14,
                     Convert.ToInt32(veh.GetVehicle().VehMods["14"]));
             }
 
             //Sync tyre smokes
             if (veh.GetVehicle()?.VehMods?.ContainsKey(ModdingManager.TyresSmokeColorId.ToString()) ?? false)
             {
-                sender.TriggerEvent("CallNative", Hash.TOGGLE_VEHICLE_MOD, veh, 20, true);
+                NAPI.Native.SendNativeToPlayer(sender, Hash.TOGGLE_VEHICLE_MOD, veh, 20, true);
             }
             else
             {
-                sender.TriggerEvent("CallNative", Hash.TOGGLE_VEHICLE_MOD, veh, 20, false);
+                NAPI.Native.SendNativeToPlayer(sender, Hash.TOGGLE_VEHICLE_MOD, veh, 20, false);
             }
         }
 
@@ -372,7 +372,7 @@ namespace mtgvrp.vehicle_manager
                 NAPI.Chat.SendChatMessageToPlayer(player, "You must have access to the vehicle.");
                 return;
             }
-
+            
             if (!API.GetVehicleDoorState(lastVeh.Entity, 5))
             {
                 NAPI.Chat.SendChatMessageToPlayer(player, "Trunk must be open to access the storage.");
@@ -746,7 +746,7 @@ namespace mtgvrp.vehicle_manager
 
             veh.Driver = player.GetCharacter();
             veh.LastOccupied = DateTime.Now;
-            API.SetPlayerSeatbelt(player, true);
+            // NAPI.Player.SetPlayerSeatBelt(player, true); TODO: fix seatbelts
 
             foreach (var p in NAPI.Pools.GetAllPlayers())
             {
@@ -755,11 +755,11 @@ namespace mtgvrp.vehicle_manager
 
                 if (p.Position.DistanceTo(NAPI.Entity.GetEntityPosition(vehicleHandle)) <= 250.0f)
                 {
-                    player.TriggerEvent("CallNative", Hash.SET_ENTITY_INVINCIBLE, vehicleHandle, false);
-                    player.TriggerEvent("CallNative", Hash.SET_ENTITY_PROOFS, vehicleHandle, 0, 0, 0, 0, 0, 0, 0, 0);
-                    player.TriggerEvent("CallNative", Hash.SET_VEHICLE_TYRES_CAN_BURST, vehicleHandle, 1);
-                    player.TriggerEvent("CallNative", Hash.SET_VEHICLE_WHEELS_CAN_BREAK, vehicleHandle, 1);
-                    player.TriggerEvent("CallNative", Hash.SET_VEHICLE_CAN_BE_VISIBLY_DAMAGED, vehicleHandle, 1);
+                    NAPI.Native.SendNativeToPlayer(player, Hash.SET_ENTITY_INVINCIBLE, vehicleHandle, false);
+                    NAPI.Native.SendNativeToPlayer(player, Hash.SET_ENTITY_PROOFS, vehicleHandle, 0, 0, 0, 0, 0, 0, 0, 0);
+                    NAPI.Native.SendNativeToPlayer(player, Hash.SET_VEHICLE_TYRES_CAN_BURST, vehicleHandle, 1);
+                    NAPI.Native.SendNativeToPlayer(player, Hash.SET_VEHICLE_WHEELS_CAN_BREAK, vehicleHandle, 1);
+                    NAPI.Native.SendNativeToPlayer(player, Hash.SET_VEHICLE_CAN_BE_VISIBLY_DAMAGED, vehicleHandle, 1);
                 }
             }
         }
@@ -810,11 +810,11 @@ namespace mtgvrp.vehicle_manager
 
                     if (p.Position.DistanceTo(NAPI.Entity.GetEntityPosition(vehicleHandle)) <= 250.0f)
                     {
-                        player.TriggerEvent("CallNative", Hash.SET_ENTITY_INVINCIBLE, vehicleHandle, true);
-                        player.TriggerEvent("CallNative", Hash.SET_ENTITY_PROOFS, vehicleHandle, 1, 1, 1, 1, 1, 1, 1, 1);
-                        player.TriggerEvent("CallNative", Hash.SET_VEHICLE_TYRES_CAN_BURST, vehicleHandle, 0);
-                        player.TriggerEvent("CallNative", Hash.SET_VEHICLE_WHEELS_CAN_BREAK, vehicleHandle, 0);
-                        player.TriggerEvent("CallNative", Hash.SET_VEHICLE_CAN_BE_VISIBLY_DAMAGED, vehicleHandle, 0);
+                        NAPI.Native.SendNativeToPlayer(player, Hash.SET_ENTITY_INVINCIBLE, vehicleHandle, true);
+                        NAPI.Native.SendNativeToPlayer(player, Hash.SET_ENTITY_PROOFS, vehicleHandle, 1, 1, 1, 1, 1, 1, 1, 1);
+                        NAPI.Native.SendNativeToPlayer(player, Hash.SET_VEHICLE_TYRES_CAN_BURST, vehicleHandle, 0);
+                        NAPI.Native.SendNativeToPlayer(player, Hash.SET_VEHICLE_WHEELS_CAN_BREAK, vehicleHandle, 0);
+                        NAPI.Native.SendNativeToPlayer(player, Hash.SET_VEHICLE_CAN_BE_VISIBLY_DAMAGED, vehicleHandle, 0);
                     }
                 }
             }

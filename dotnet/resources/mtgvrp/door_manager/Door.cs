@@ -78,17 +78,15 @@ namespace mtgvrp.door_manager
             Doors.Add(this);
         }
 
-        // TODO: fix this
         public void RefreshDoor()
         {
-            /*foreach (var person in Shape.GetAllEntities())
+            foreach (var player in NAPI.Pools.GetAllPlayers())
             {
-                var player = API.Shared.GetPlayerFromHandle(person);
-                if (player == null) continue;
-                API.Shared.SendNativeToPlayer(player, SetStateOfClosestDoorOfType,
+                if (!Shape.IsPointWithin(player.Position)) continue;
+                NAPI.Native.SendNativeToPlayer(player, SetStateOfClosestDoorOfType,
                     Hash, Position.X, Position.Y, Position.Z,
                     Locked, State, false);
-            }*/
+            }
         }
 
         private void Shape_onEntityEnterColShape(ColShape colshape, Player entity)
@@ -99,7 +97,7 @@ namespace mtgvrp.door_manager
 
                 if (player == null) return;
 
-                API.Shared.SendNativeToPlayer(player, SetStateOfClosestDoorOfType,
+                NAPI.Native.SendNativeToPlayer(player, SetStateOfClosestDoorOfType,
                     Hash, Position.X, Position.Y, Position.Z,
                     Locked, State, false);
             }

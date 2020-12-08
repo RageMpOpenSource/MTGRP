@@ -64,7 +64,7 @@ namespace mtgvrp.rp_scripts
             };
             foreach (var t in Atms)
             {
-                API.CreateTextLabel("~g~ATM\n~w~(/atm)", t, 25.0f, 0.5f, 1, new GTANetworkAPI.Color(1, 1, 1));
+                NAPI.TextLabel.CreateTextLabel("~g~ATM\n~w~(/atm)", t, 25.0f, 0.5f, 1, new GTANetworkAPI.Color(1, 1, 1));
             }
 
             // Withdraw/deposit amounts for bank menu

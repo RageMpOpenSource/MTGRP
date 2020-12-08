@@ -32,20 +32,17 @@ namespace mtgvrp.door_manager
             reloadDoorsTimer.Start();
         }
 
-        // TODO: fixme
         private void ReloadDoorsTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             foreach (var door in Door.Doors)
             {
-                /*foreach (var player in door.Shape.getAllEntities())
+                foreach (var client in NAPI.Pools.GetAllPlayers())
                 {
-                    var client = NAPI.Player.GetPlayerFromHandle(player);
-                    if(client == null)
-                        continue;
-                    API.Shared.SendNativeToPlayer(client, Door.SetStateOfClosestDoorOfType,
+                    if (!door.Shape.IsPointWithin(client.Position)) continue;
+                    NAPI.Native.SendNativeToPlayer(client, Door.SetStateOfClosestDoorOfType,
                         door.Hash, door.Position.X, door.Position.Y, door.Position.Z,
                         door.Locked, door.State, false);
-                }*/
+                }
             }
         }
 

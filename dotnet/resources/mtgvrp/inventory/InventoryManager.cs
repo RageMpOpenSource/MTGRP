@@ -506,7 +506,7 @@ namespace mtgvrp.inventory
             var rightJson = API.Shared.ToJson(rightItems);
             var usedLeft = GetInventoryFilledSlots(activeLeft) + "/" + activeLeft.MaxInvStorage;
             var usedRight = GetInventoryFilledSlots(activeRight) + "/" + activeRight.MaxInvStorage;
-            API.Shared.FreezePlayer(player, true);
+            player.TriggerEvent("freezePlayer", true);
             API.Shared.TriggerClientEvent(player, "invmanagement_showmanager", leftJson, rightJson, leftTitle, rightTitle, usedLeft, usedRight);
             _activeInvsBeingManaged.Add(player, new KeyValuePair<IStorage, IStorage>(activeLeft, activeRight));
         }
@@ -519,7 +519,7 @@ namespace mtgvrp.inventory
             _activeInvsBeingManaged[sender].Value.Save();
 
             _activeInvsBeingManaged.Remove(sender);
-            API.Shared.FreezePlayer(sender, false);
+            sender.TriggerEvent("freezePlayer", false);
             NAPI.Notification.SendNotificationToPlayer(sender, "Closed Inventory Management.");
         }
 

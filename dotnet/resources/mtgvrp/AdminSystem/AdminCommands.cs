@@ -1002,16 +1002,16 @@ namespace mtgvrp.AdminSystem
             if (account.AdminDuty == false)
             {
                 account.AdminDuty = true;
-                API.SetPlayerNametagColor(player, 51, 102, 255);
-                API.SetPlayerNametag(player, account.AdminName + " (" + PlayerManager.GetPlayerId(character) + ")");
+                // API.SetPlayerNametagColor(player, 51, 102, 255); // TODO: addback nametag color
+                NAPI.Player.SetPlayerNametag(player, account.AdminName + " (" + PlayerManager.GetPlayerId(character) + ")");
                 NAPI.Chat.SendChatMessageToPlayer(player, "You are now on admin duty.");
                 SendtoAllAdmins($"{account.AdminName} has gone on admin duty.");
                 return;
             }
 
             account.AdminDuty = false;
-            API.SetPlayerNametag(player, character.CharacterName + " (" + PlayerManager.GetPlayerId(character) + ")");
-            API.ResetPlayerNametagColor(player);
+            NAPI.Player.SetPlayerNametag(player, character.CharacterName + " (" + PlayerManager.GetPlayerId(character) + ")");
+            // API.ResetPlayerNametagColor(player); // TODO: addback nametag color
             NAPI.Chat.SendChatMessageToPlayer(player, "You are no longer on admin duty.");
             SendtoAllAdmins($"{account.AdminName} has gone off admin duty.");
             Log(LogTypes.AdminActions,
@@ -1237,7 +1237,7 @@ namespace mtgvrp.AdminSystem
             player.SendChatMessage(
                 $"{receivercharacter.CharacterName}'s playing hours: ~g~{receivercharacter.GetPlayingHours()}.");
             NAPI.Entity.SetEntityPosition(player, NAPI.Entity.GetEntityPosition(receiver));
-            API.SetPlayerNametagColor(player, 51, 102, 255);
+            // API.SetPlayerNametagColor(player, 51, 102, 255); // Add back nametag color
             account.AdminActions++;
             Log(LogTypes.AdminActions,
                 $"[/{MethodBase.GetCurrentMethod().GetCustomAttributes(typeof(CommandAttribute), false)[0].CastTo<CommandAttribute>().CommandString}] Admin {account.AdminName} has accepted {GetLogName(receiver)}'s /ask.");
@@ -1263,7 +1263,7 @@ namespace mtgvrp.AdminSystem
             character.IsOnAsk = false;
             NAPI.Chat.SendChatMessageToPlayer(player, "Ask finished.");
             NAPI.Entity.SetEntityPosition(player, character.LastPos);
-            API.ResetPlayerNametagColor(player);
+            // API.ResetPlayerNametagColor(player); TODO: add back nametag color
             Log(LogTypes.AdminActions,
                 $"[/{MethodBase.GetCurrentMethod().GetCustomAttributes(typeof(CommandAttribute), false)[0].CastTo<CommandAttribute>().CommandString}] Admin {account.AdminName} has finished their /ask.");
         }

@@ -333,12 +333,12 @@ namespace mtgvrp.vehicle_manager.modding
                             if (Convert.ToInt32(clrs[1]) == 0 && Convert.ToInt32(clrs[1]) == 0 &&
                                 Convert.ToInt32(clrs[1]) == 0)
                             {
-                                API.Shared.SendNativeToPlayer(p,
+                                NAPI.Native.SendNativeToPlayer(p,
                                     Hash.TOGGLE_VEHICLE_MOD, veh.Entity, 20, false);
                             }
                             else
                             {
-                                API.Shared.SendNativeToPlayer(p,
+                                NAPI.Native.SendNativeToPlayer(p,
                                     Hash.TOGGLE_VEHICLE_MOD, veh.Entity, 20, true);
                             }
                         }
@@ -368,7 +368,7 @@ namespace mtgvrp.vehicle_manager.modding
                             if (API.Shared.GetEntityPosition(veh.Entity)
                                     .DistanceTo(p.Position) <= 500)
                             {
-                                API.Shared.SendNativeToPlayer(p,
+                                NAPI.Native.SendNativeToPlayer(p,
                                     Hash.SET_VEHICLE_MOD, veh.Entity, 14, Convert.ToInt32(mod.Value));
                             }
                         }

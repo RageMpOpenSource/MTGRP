@@ -129,7 +129,7 @@ namespace mtgvrp.dmv
 
             if (veh.IsSpawned)
             {
-                API.SetVehicleNumberPlate(veh.Entity, veh.LicensePlate);
+                NAPI.Vehicle.SetVehicleNumberPlate(veh.Entity, veh.LicensePlate);
             }
 
             //Remove money.

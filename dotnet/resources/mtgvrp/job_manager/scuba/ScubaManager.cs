@@ -46,7 +46,7 @@ namespace mtgvrp.job_manager.scuba
                 return;
             }
 
-            player.TriggerEvent("CallNative", Hash.SET_PED_MAX_TIME_UNDERWATER, player, 3600.0f);
+            NAPI.Native.SendNativeToPlayer(player, Hash.SET_PED_MAX_TIME_UNDERWATER, player, 3600.0f);
             NAPI.ClientEvent.TriggerClientEvent(player, "UPDATE_SCUBA_PERCENTAGE",
                 "Oxygen Remaining: " + Math.Round((scubaitem[0].OxygenRemaining / ScubaItem.MaxOxygen) * 100f) +
                 "%");
@@ -297,7 +297,7 @@ namespace mtgvrp.job_manager.scuba
                 new Timer(delegate { RefreshScuba(player); }, null, 1000, 1000));
 
             //Set the scuba state as true.
-            player.TriggerEvent("CallNative", Hash.SET_ENABLE_SCUBA, player, true);
+            NAPI.Native.SendNativeToPlayer(player, Hash.SET_ENABLE_SCUBA, player, true);
 
             //Show remaining oxygen.
             NAPI.ClientEvent.TriggerClientEvent(player, "UPDATE_SCUBA_PERCENTAGE",
@@ -355,7 +355,7 @@ namespace mtgvrp.job_manager.scuba
             }
 
             //Set scuba state
-            player.TriggerEvent("CallNative", Hash.SET_ENABLE_SCUBA, player, false);
+            NAPI.Native.SendNativeToPlayer(player, Hash.SET_ENABLE_SCUBA, player, false);
 
             //Remove exygen
             NAPI.ClientEvent.TriggerClientEvent(player, "UPDATE_SCUBA_PERCENTAGE", "none");
@@ -367,7 +367,7 @@ namespace mtgvrp.job_manager.scuba
             character.update_ped();
 
             //Set normal underwater time.
-            player.TriggerEvent("CallNative", Hash.SET_PED_MAX_TIME_UNDERWATER, player, 60.0f);
+            NAPI.Native.SendNativeToPlayer(player, Hash.SET_PED_MAX_TIME_UNDERWATER, player, 60.0f);
         }
     }
 }

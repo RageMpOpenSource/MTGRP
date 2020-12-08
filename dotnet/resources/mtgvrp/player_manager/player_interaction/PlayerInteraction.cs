@@ -66,7 +66,7 @@ namespace mtgvrp.player_manager.player_interaction
                         if (interactCharacter.IsCuffed == false)
                         {
 
-                            var isStunned = API.FetchNativeFromPlayer<bool>(interactClient,
+                            var isStunned = NAPI.Native.FetchNativeFromPlayer<bool>(interactClient,
                                 Hash.IS_PED_BEING_STUNNED, interactHandle, 0);
 
                             if (interactCharacter.AreHandsUp == false && isStunned == false)
@@ -84,7 +84,7 @@ namespace mtgvrp.player_manager.player_interaction
                             }
 
                             NAPI.Player.GivePlayerWeapon(player, WeaponHash.Unarmed, 1);
-                            API.SendNativeToAllPlayers(Hash.SET_ENABLE_HANDCUFFS, interactHandle, true);
+                            NAPI.Native.SendNativeToAllPlayers(Hash.SET_ENABLE_HANDCUFFS, interactHandle, true);
                             interactCharacter.IsCuffed = true;
                             interactCharacter.Player.TriggerEvent("freezePlayer", true);
                             NAPI.Player.PlayPlayerAnimation(interactCharacter.Player, (int)(1 << 0 | 1 << 4 | 1 << 5),
@@ -104,7 +104,7 @@ namespace mtgvrp.player_manager.player_interaction
                             }
 
                             interactCharacter.Player.TriggerEvent("freezePlayer", false);
-                            API.SendNativeToAllPlayers(Hash.SET_ENABLE_HANDCUFFS, interactHandle, false);
+                            NAPI.Native.SendNativeToAllPlayers(Hash.SET_ENABLE_HANDCUFFS, interactHandle, false);
                             interactCharacter.IsCuffed = false;
                             NAPI.Player.StopPlayerAnimation(interactCharacter.Player);
 
@@ -232,7 +232,7 @@ namespace mtgvrp.player_manager.player_interaction
  
         public void FollowPlayer(Character c, bool isDrag)
         {
-            /*API.SendNativeToAllPlayers(Hash.TASK_FOLLOW_TO_OFFSET_OF_ENTITY, c.Player,
+            /*NAPI.Native.SendNativeToAllPlayers(Hash.TASK_FOLLOW_TO_OFFSET_OF_ENTITY, c.Player,
                                     c.FollowingPlayer.Player, -1.0, 0.0, 0.0, 1, 1050, 2, true);*/
             //TODO: fix dragging
 

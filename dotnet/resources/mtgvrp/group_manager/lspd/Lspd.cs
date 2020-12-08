@@ -372,7 +372,7 @@ namespace mtgvrp.group_manager.lspd
                 }
             }
 
-            API.SendNativeToAllPlayers(Hash.SET_ENABLE_HANDCUFFS, receiverCharacter.Player, false);
+            NAPI.Native.SendNativeToAllPlayers(Hash.SET_ENABLE_HANDCUFFS, receiverCharacter.Player, false);
             receiverCharacter.IsCuffed = false;
             NAPI.Player.StopPlayerAnimation(receiverCharacter.Player);
 
@@ -527,7 +527,7 @@ namespace mtgvrp.group_manager.lspd
                 return;
             }
 
-            var isStunned = API.FetchNativeFromPlayer<bool>(receiver, Hash.IS_PED_BEING_STUNNED, receiver, 0);
+            var isStunned = NAPI.Native.FetchNativeFromPlayer<bool>(receiver, Hash.IS_PED_BEING_STUNNED, receiver, 0);
 
             if (receivercharacter.AreHandsUp == false && isStunned == false)
             {
@@ -536,7 +536,7 @@ namespace mtgvrp.group_manager.lspd
             }
 
             NAPI.Player.GivePlayerWeapon(player, WeaponHash.Unarmed, 1);
-            API.SendNativeToAllPlayers(Hash.SET_ENABLE_HANDCUFFS, receivercharacter, true);
+            NAPI.Native.SendNativeToAllPlayers(Hash.SET_ENABLE_HANDCUFFS, receivercharacter, true);
             receivercharacter.IsCuffed = true;
             NAPI.Player.PlayPlayerAnimation(receiver, (1 << 0 | 1 << 4 | 1 << 5), "mp_arresting", "idle");
             receiver.TriggerEvent("freezePlayer", true);
@@ -582,7 +582,7 @@ namespace mtgvrp.group_manager.lspd
                 return;
             }
 
-            API.SendNativeToAllPlayers(Hash.SET_ENABLE_HANDCUFFS, receivercharacter, false);
+            NAPI.Native.SendNativeToAllPlayers(Hash.SET_ENABLE_HANDCUFFS, receivercharacter, false);
             receivercharacter.IsCuffed = false;
             receiver.TriggerEvent("freezePlayer", false);
             ChatManager.RoleplayMessage(player, "removes handcuffs from " + receivercharacter.rp_name(), ChatManager.RoleplayMe);

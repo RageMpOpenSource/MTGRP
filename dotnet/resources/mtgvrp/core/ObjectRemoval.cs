@@ -20,7 +20,7 @@ namespace mtgvrp.core
                     {
                         if (player.Position.DistanceTo(obj[0]) <= 175.0f)
                         {
-                            API.DeletePlayerWorldProp(player, obj[0], obj[1], 50.0f);
+                            NAPI.Player.DeletePlayerWorldProp(player, obj[0], obj[1], 50.0f);
                         }
                     }
                 }
