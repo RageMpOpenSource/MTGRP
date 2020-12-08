@@ -6,6 +6,7 @@ using mtgvrp.inventory;
 using mtgvrp.player_manager;
 using mtgvrp.core.Help;
 using mtgvrp.job_manager.gunrunner;
+using mtgvrp.weapon_tints;
 
 namespace mtgvrp.weapon_manager
 {
@@ -26,7 +27,7 @@ namespace mtgvrp.weapon_manager
             foreach (Weapon weapon in InventoryManager.DoesInventoryHaveItem<Weapon>(e.Character))
             {
                 NAPI.Player.GivePlayerWeapon(e.Character.Player, weapon.WeaponHash, 9999);
-                API.SetPlayerWeaponTint(e.Character.Player, weapon.WeaponHash, weapon.WeaponTint);
+                e.Character.Player.SetWeaponTint(weapon.WeaponHash, weapon.WeaponTint);
             }
         }
 
@@ -113,10 +114,10 @@ namespace mtgvrp.weapon_manager
             }
             if (playerAccount.VipLevel == 0)
             {
-                API.Shared.SetPlayerWeaponTint(player, currentWeapon.WeaponHash, WeaponTint.Normal);
+                player.SetWeaponTint(currentWeapon.WeaponHash, WeaponTint.Normal);
                 return;
             }
-            else { API.Shared.SetPlayerWeaponTint(player, currentWeapon.WeaponHash, currentWeapon.WeaponTint); }
+            else { player.SetWeaponTint(currentWeapon.WeaponHash, currentWeapon.WeaponTint); }
 
         }
 
@@ -165,7 +166,7 @@ namespace mtgvrp.weapon_manager
                 if (weapon.WeaponHash == weaponhash)
                 {
                     weapon.WeaponTint = weapontint;
-                    API.Shared.SetPlayerWeaponTint(player, weaponhash, weapontint);
+                    player.SetWeaponTint(weaponhash, weapontint);
                 }
             }
         }
@@ -199,8 +200,8 @@ namespace mtgvrp.weapon_manager
 
             if (DoesPlayerHaveWeapon(player, weapon.WeaponHash)) { return; }
 
-            if (account.VipLevel < 1) { API.Shared.SetPlayerWeaponTint(player, weapon.WeaponHash, WeaponTint.Normal); }
-            else { API.Shared.SetPlayerWeaponTint(player, weapon.WeaponHash, weapon.WeaponTint); }
+            if (account.VipLevel < 1) { player.SetWeaponTint(weapon.WeaponHash, WeaponTint.Normal); }
+            else { player.SetWeaponTint(weapon.WeaponHash, weapon.WeaponTint); }
             //API.Shared.GivePlayerWeaponComponent(player, weapon.WeaponHash, weapon.WeaponComponent);
 
             InventoryManager.GiveInventoryItem(character, weapon, 1);

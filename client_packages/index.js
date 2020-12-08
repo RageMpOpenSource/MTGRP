@@ -1,4 +1,5 @@
 require('core/AttachmentManager.js');
+require('core/WeaponTints.js');
 // require('rp_scripts/BankMenu.js');
 require('player_manager/PlayerManager.js');
 // require('player_manager/player_interaction/PlayerInteraction.js');
