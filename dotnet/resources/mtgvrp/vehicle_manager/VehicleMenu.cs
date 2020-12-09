@@ -5,6 +5,7 @@ using GTANetworkAPI;
 
 using mtgvrp.core;
 using mtgvrp.player_manager;
+using System.Threading.Tasks;
 
 namespace mtgvrp.vehicle_manager
 {
@@ -16,7 +17,7 @@ namespace mtgvrp.vehicle_manager
         }
 
         [RemoteEvent("OnVehicleMenuTrigger")]
-        public void OnVehicleMenuTrigger(Player player, params object[] arguments)
+        public async Task OnVehicleMenuTriggerAsync(Player player, params object[] arguments)
         {
             var vehicleHandle = (Entity)arguments[0];
             var option = (string)arguments[1];
@@ -116,16 +117,16 @@ namespace mtgvrp.vehicle_manager
                             break;
                     }
 
-                    var doorState = API.GetVehicleDoorState(vehicleHandle, doorIndex);
+                    bool doorState = (bool)await player.TriggerProcedure("getVehicleDoorState", vehicleHandle.Id, doorIndex);
 
                     if(doorState)
                     {
-                        API.SetVehicleDoorState(vehicleHandle, doorIndex, false);
+                        player.TriggerEventToStreamed(true, "setVehicleDoorState", null, vehicleHandle.Id, doorIndex, false);
                         ChatManager.RoleplayMessage(character, "closed the " + doorName + " of the vehicle.", ChatManager.RoleplayMe);
                     }
                     else
                     {
-                        API.SetVehicleDoorState(vehicleHandle, doorIndex, true);
+                        player.TriggerEventToStreamed(true, "setVehicleDoorState", null, vehicleHandle.Id, doorIndex, false);
                         ChatManager.RoleplayMessage(character, "opened the " + doorName + " of the vehicle.", ChatManager.RoleplayMe);
                     }
 

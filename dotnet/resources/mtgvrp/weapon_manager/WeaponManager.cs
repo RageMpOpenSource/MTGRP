@@ -171,7 +171,7 @@ namespace mtgvrp.weapon_manager
             }
         }
 
-        public static void SetWeaponComponent(Player player, WeaponHash weaponhash, WeaponComponent weaponcomponent)
+        /*public static void SetWeaponComponent(Player player, WeaponHash weaponhash, WeaponComponent weaponcomponent)
         {
             Character character = player.GetCharacter();
 
@@ -183,7 +183,7 @@ namespace mtgvrp.weapon_manager
                     API.Shared.SetPlayerWeaponComponent(player, weaponhash, weaponcomponent);
                 }
             }
-        }
+        }*/
 
         public static void RemoveAllPlayerWeapons(Player player)
         {

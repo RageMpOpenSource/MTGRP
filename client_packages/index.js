@@ -44,3 +44,19 @@ require('player_manager/login/LoginManager.js');
 // require('dmv/DmvManager.js');
 // require('mapping_manager/MappingManager.js');
 // require('vehicle_manager/modding/ModdingManager.js');
+
+/** WORKAROUND EVENTS */
+
+mp.events.add('setVehicleDoorState', (vehid, doorid, state) => {
+    let veh = mp.vehicles.atRemoteId(vehid);
+    if(veh != undefined) {
+        if(state == false)
+            veh.setDoorShut(doorid, true);
+        else
+            veh.setDoorOpen(doorid, false, true);
+    }
+});
+
+mp.events.addProc('getVehicleDoorState', (vehid, doorid) => {
+    return mp.vehicles.atRemoteId(vehid).isDoorFullyOpen(doorid);
+  });

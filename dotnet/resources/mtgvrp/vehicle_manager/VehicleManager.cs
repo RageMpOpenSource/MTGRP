@@ -361,7 +361,7 @@ namespace mtgvrp.vehicle_manager
         }
 
         [Command("vstorage"), Help(HelpManager.CommandGroups.Vehicles, "Used to use your vehicles boot.", null)]
-        public void VehicleStorage(Player player)
+        public async Task VehicleStorage(Player player)
         {
             var lastVehNetHandle = GetClosestVehicle(player, 10f);
             var lastVeh = lastVehNetHandle.GetVehicle();
@@ -373,7 +373,7 @@ namespace mtgvrp.vehicle_manager
                 return;
             }
             
-            if (!API.GetVehicleDoorState(lastVeh.Entity, 5))
+            if (!(bool)await player.TriggerProcedure("getVehicleDoorState", lastVeh.Id, 5))
             {
                 NAPI.Chat.SendChatMessageToPlayer(player, "Trunk must be open to access the storage.");
                 return;
