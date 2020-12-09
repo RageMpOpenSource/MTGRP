@@ -654,7 +654,7 @@ namespace mtgvrp.AdminSystem
                 $"[/{MethodBase.GetCurrentMethod().GetCustomAttributes(typeof(CommandAttribute), false)[0].CastTo<CommandAttribute>().CommandString}] Admin {account.AdminName} has set vehicleid {receiver.Id} health to {health}");
         }
 
-        [Command("spec"),
+        /*[Command("spec"),
          Help(HelpManager.CommandGroups.AdminLevel2, "View a player without them seeing you. Sneaky stuff.",
              new[] {"Id: The id of player."})]
         public static void spec_cmd(Player player, string id)
@@ -709,7 +709,7 @@ namespace mtgvrp.AdminSystem
             NAPI.Chat.SendChatMessageToPlayer(player, "You are no longer spectating anyone.");
             Log(LogTypes.AdminActions,
                 $"[/{MethodBase.GetCurrentMethod().GetCustomAttributes(typeof(CommandAttribute), false)[0].CastTo<CommandAttribute>().CommandString}] Admin {account.AdminName} has stopped speccing.");
-        }
+        }*/
 
         [Command("slap"),
          Help(HelpManager.CommandGroups.AdminLevel2, "Slaps the given player into the air.",
