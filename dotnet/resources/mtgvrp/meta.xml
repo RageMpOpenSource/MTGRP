@@ -2,6 +2,6 @@
    <info name="Init" author="Ahmed" type="gamemode" async="true"/>
 
 	<!-- MAIN script with all *.cs files. -->
-	<script src="bin/Debug/netcoreapp2.0/mtgvrp.dll" type="server" lang="compiled"/>
+	<script src="bin/Debug/netcoreapp3.1/mtgvrp.dll" type="server" lang="compiled"/>
 
 </meta>
