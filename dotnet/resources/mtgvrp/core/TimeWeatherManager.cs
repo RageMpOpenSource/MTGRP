@@ -70,7 +70,7 @@ namespace mtgvrp.core
             NAPI.World.SetTime(Hours, Minutes, 0);
 
             //Update weather
-            if (_elapsedMinutes >= 30)
+            /*if (_elapsedMinutes >= 30)
             {
                 _elapsedMinutes = 0;
                 WebClient client = new WebClient();
@@ -165,7 +165,7 @@ namespace mtgvrp.core
                     }
                     NAPI.Util.ConsoleOutput("Set Weather To " + NAPI.World.GetWeather());
                 }
-            }
+            }*/
         }
 
         //Los Angeles Time.

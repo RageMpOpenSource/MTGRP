@@ -206,6 +206,7 @@ namespace mtgvrp.player_manager.login
         {
             DebugManager.DebugMessage("[LoginM] " + player.SocialClubName + " has connected to the server [NOT LOGGED IN]. (IP: " + player.Address + ")");
             LogManager.Log(LogManager.LogTypes.Connection, player.SocialClubName + " has connected to the server [NOT LOGGED IN]. (IP: " + player.Address + ")");
+            player.TriggerEvent("ShowLoginScreen");
 
             Account account = player.GetAccount();
             NAPI.Data.SetEntitySharedData(player, "REG_DIMENSION", 1000);

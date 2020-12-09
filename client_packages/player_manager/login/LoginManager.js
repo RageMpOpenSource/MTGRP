@@ -3,7 +3,7 @@ login_view.pointAtCoord(718.9848, 1194.599, 325.2131);
 
 var login_browser = null;
 
-Event.OnResourceStart.connect(function () {
+mp.events.add('ShowLoginScreen', () => {
     login_browser = mp.browsers.new("package://player_manager/login/Login.html");
     mp.gui.cursor.show(true, true);
     mp.gui.chat.activate(false);

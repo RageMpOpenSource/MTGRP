@@ -13,7 +13,7 @@
     <PackageReference Include="DSharpPlus" Version="3.2.3" />
     <PackageReference Include="DSharpPlus.CommandsNext" Version="3.2.3" />
     <PackageReference Include="DSharpPlus.Interactivity" Version="3.2.3" />
-    <PackageReference Include="MongoDB.Driver" Version="2.11.5" />
+    <PackageReference Include="MongoDB.Driver" Version="2.10.1" />
     <PackageReference Include="NodaTime" Version="3.0.3" />
   </ItemGroup>
   <ItemGroup>
