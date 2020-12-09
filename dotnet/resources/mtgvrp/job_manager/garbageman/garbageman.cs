@@ -11,6 +11,7 @@ using mtgvrp.player_manager;
 using mtgvrp.vehicle_manager;
 using mtgvrp.property_system;
 using mtgvrp.inventory;
+using mtgvrp.attachment_manager;
 
 namespace mtgvrp.job_manager.garbageman
 {
@@ -19,21 +20,16 @@ namespace mtgvrp.job_manager.garbageman
         [ServerEvent(Event.PlayerDisconnected)]
         public void OnPlayerDisconnected(Player player, byte type, string reason)
         {
-            var c = player.GetCharacter();
-            if (c?.GarbageBag != null)
-            {
-                NAPI.Entity.DeleteEntity(c.GarbageBag);
-            }
+            player.ToggleAttachment("GarbageBag", true);
         }
 
         [RemoteEvent("garbage_throwbag")]
         public void GarbageThrowBag(Player player, params object[] arguments)
         {
             Character character = player.GetCharacter();
-            NAPI.Entity.DeleteEntity(character.GarbageBag);
-            character.GarbageBag = null;
+            player.ToggleAttachment("GarbageBag", true);
 
-            vehicle_manager.GameVehicle closestVeh = VehicleManager.GetClosestVehicle(player, 10f).GetVehicle();
+            GameVehicle closestVeh = VehicleManager.GetClosestVehicle(player, 10f).GetVehicle();
 
             if (NAPI.Player.IsPlayerInAnyVehicle(player))
             {
@@ -319,7 +315,7 @@ namespace mtgvrp.job_manager.garbageman
                 return;
             }
 
-            if (character.GarbageBag != null)
+            if (player.HasAttachment("GarbageBag"))
             {
                 player.SendChatMessage("You are already carrying a garbage bag.");
                 return;
@@ -327,8 +323,7 @@ namespace mtgvrp.job_manager.garbageman
 
             prop.GarbageBags -= 1;
             prop.UpdateMarkers();
-            character.GarbageBag = NAPI.Object.CreateObject(NAPI.Util.GetHashKey("hei_prop_heist_binbag"), player.Position, new Vector3());
-            API.AttachEntityToEntity(character.GarbageBag, player, "IK_R_Hand", new Vector3(0, 0, 0), new Vector3(360, 0, 0));
+            player.ToggleAttachment("GarbageBag", false);
             NAPI.ClientEvent.TriggerClientEvent(player, "garbage_holdbag");
             ChatManager.RoleplayMessage(character, "reaches into the trash and pulls out a garbage bag.", ChatManager.RoleplayMe);
             player.SendChatMessage("You are holding a garbage bag. Press LMB to throw it into the back of the garbage truck");
@@ -366,7 +361,7 @@ namespace mtgvrp.job_manager.garbageman
                 return;
             }
 
-            if (character.GarbageBag != null)
+            if (player.HasAttachment("GarbageBag"))
             {
                 player.SendChatMessage("You are already carrying a garbage bag.");
                 return;
@@ -374,8 +369,7 @@ namespace mtgvrp.job_manager.garbageman
 
             prop.GarbageBags -= 1;
             prop.UpdateMarkers();
-            character.GarbageBag = NAPI.Object.CreateObject(NAPI.Util.GetHashKey("hei_prop_heist_binbag"), player.Position, new Vector3());
-            API.AttachEntityToEntity(character.GarbageBag, player, "IK_R_Hand", new Vector3(0, 0, 0), new Vector3(360, 0, 0));
+            player.ToggleAttachment("GarbageBag", false);
             NAPI.ClientEvent.TriggerClientEvent(player, "garbage_holdbag");
             ChatManager.RoleplayMessage(character, "reaches into the trash and pulls out a garbage bag.", ChatManager.RoleplayMe);
             player.SendChatMessage("You are holding a garbage bag. Press LMB to throw it into the back of the garbage truck");

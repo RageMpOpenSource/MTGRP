@@ -59,4 +59,12 @@ mp.events.add('setVehicleDoorState', (vehid, doorid, state) => {
 
 mp.events.addProc('getVehicleDoorState', (vehid, doorid) => {
     return mp.vehicles.atRemoteId(vehid).isDoorFullyOpen(doorid);
-  });
+});
+
+// Register attachable objects!
+mp.attachmentMngr.register('MicObject', 'p_ing_microphonel_01', 'IK_R_Hand', new mp.Vector3(0, 0, 0), new mp.Vector3(0, 0, 0));
+mp.attachmentMngr.register('GarbageBag', 'hei_prop_heist_binbag', 'IK_R_Hand', new mp.Vector3(0, 0, 0), new mp.Vector3(360, 0, 0));
+mp.attachmentMngr.register('MegaPhoneObject', 'prop_megaphone_01', 'IK_R_Hand', new mp.Vector3(0, 0, 0), new mp.Vector3(0, 0, 0));
+
+mp.attachmentMngr.register('ScubaHead', 239157435, 'SKEL_Head', new mp.Vector3(0, 0, 0), new mp.Vector3(180, 90, 0));
+mp.attachmentMngr.register('ScubaTank', 1593773001, 'SKEL_Spine3', new mp.Vector3(-0.3, -0.23, 0), new mp.Vector3(180, 90, 0));

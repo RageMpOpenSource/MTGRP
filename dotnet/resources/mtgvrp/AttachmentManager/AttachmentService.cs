@@ -1,7 +1,6 @@
 using GTANetworkAPI;
-using Server.Extensions;
 
-namespace Server.Services
+namespace mtgvrp.attachment_manager
 {
     /// <summary>
     /// Thanks to DasNiels for providing Efficient Attachment Sync C#
@@ -37,16 +36,6 @@ namespace Server.Services
         private void OnStaticAttachmentRemove(Player player, string attachment)
         {
             player.ToggleAttachment(attachment, true);
-        }
-
-        /// <summary>
-        /// This is an example how to attach an object through CMD
-        /// </summary>
-        /// <param name="player"></param>
-        [Command("soda")]
-        private void CMD_AddAttachment(Player player)
-        {
-            player.ToggleAttachment("soda", player.HasAttachment("soda"));
         }
     }
 }

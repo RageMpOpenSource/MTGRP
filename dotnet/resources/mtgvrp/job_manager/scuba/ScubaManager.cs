@@ -6,8 +6,7 @@ using System.Threading;
 
 
 using GTANetworkAPI;
-
-
+using mtgvrp.attachment_manager;
 using mtgvrp.core;
 using mtgvrp.core.Help;
 using mtgvrp.inventory;
@@ -282,12 +281,8 @@ namespace mtgvrp.job_manager.scuba
             }
 
             //Create the objects for the player.
-            var head = NAPI.Object.CreateObject(239157435, player.Position, new Vector3());
-            API.AttachEntityToEntity(head, player, "SKEL_Head", new Vector3(0, 0, 0), new Vector3(180, 90, 0));
-            var tank = NAPI.Object.CreateObject(1593773001, player.Position, new Vector3());
-            API.AttachEntityToEntity(tank, player, "SKEL_Spine3", new Vector3(-0.3, -0.23, 0), new Vector3(180, 90, 0));
-            NAPI.Data.SetEntityData(player, "SCUBA_TANK", tank);
-            NAPI.Data.SetEntityData(player, "SCUBA_HEAD", head);
+            player.ToggleAttachment("ScubaHead", false);
+            player.ToggleAttachment("ScubaTank", false);
 
             //Set the variable.
             character.IsScubaDiving = true;
@@ -339,20 +334,8 @@ namespace mtgvrp.job_manager.scuba
             }
 
             //Remove clothes
-            GTANetworkAPI.Object head = NAPI.Data.GetEntityData(player, "SCUBA_HEAD");
-            GTANetworkAPI.Object tank = NAPI.Data.GetEntityData(player, "SCUBA_TANK");
-            if (head != null && NAPI.Entity.DoesEntityExist(head))
-            {
-                head.Detach();
-                head.Delete();
-                NAPI.Data.ResetEntityData(player, "SCUBA_HEAD");
-            }
-            if (tank != null && NAPI.Entity.DoesEntityExist(tank))
-            {
-                tank.Detach();
-                tank.Delete();
-                NAPI.Data.ResetEntityData(player, "SCUBA_TANK");
-            }
+            player.ToggleAttachment("ScubaHead", true);
+            player.ToggleAttachment("ScubaTank", true);
 
             //Set scuba state
             NAPI.Native.SendNativeToPlayer(player, Hash.SET_ENABLE_SCUBA, player, false);

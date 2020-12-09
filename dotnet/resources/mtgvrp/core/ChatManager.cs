@@ -648,7 +648,7 @@ namespace mtgvrp.core
 
             character.AmeText = API.Shared.CreateTextLabel(Color.PlayerRoleplay + "* " + character.rp_name() + " " + action, player.Position, 15, 0.5f, 1, new GTANetworkAPI.Color(1, 1, 1), false, (uint)player.Dimension);
             API.Shared.SetTextLabelColor(character.AmeText, 194, 162, 218, 255);
-            API.Shared.AttachEntityToEntity(character.AmeText, player, "SKEL_Head", new Vector3(0.0, 0.0, 1.3), new Vector3(0, 0, 0));
+            // API.Shared.AttachEntityToEntity(character.AmeText, player, "SKEL_Head", new Vector3(0.0, 0.0, 1.3), new Vector3(0, 0, 0)); //TODO: fix atatching text labels
 
             character.AmeTimer = new System.Timers.Timer {Interval = time};
             character.AmeTimer.Elapsed += delegate { RemoveAmeText(character); };

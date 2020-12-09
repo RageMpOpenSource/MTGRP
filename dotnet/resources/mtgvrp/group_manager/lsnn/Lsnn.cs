@@ -7,6 +7,7 @@ using mtgvrp.inventory;
 using mtgvrp.player_manager;
 using mtgvrp.vehicle_manager;
 using mtgvrp.core.Help;
+using mtgvrp.attachment_manager;
 
 namespace mtgvrp.group_manager.lsnn
 {
@@ -18,8 +19,7 @@ namespace mtgvrp.group_manager.lsnn
             var character = player.GetCharacter();
             if (character == null) return;
 
-            if (character.MicObject != null && NAPI.Entity.DoesEntityExist(character.MicObject))
-                NAPI.Entity.DeleteEntity(character.MicObject);
+            player.ToggleAttachment("MicObject", true);
         }
 
         public readonly Vector3 LsnnFrontDoor = new Vector3(-319.0662f, -609.8559f, 33.55819f);
@@ -420,15 +420,12 @@ namespace mtgvrp.group_manager.lsnn
             {
                 NAPI.Notification.SendNotificationToPlayer(player, "You are speaking through a microphone.", true);
                 NAPI.Data.SetEntityData(player, "MicStatus", true);
-                character.MicObject = NAPI.Object.CreateObject(NAPI.Util.GetHashKey("p_ing_microphonel_01"), playerPos, new Vector3());
-                API.AttachEntityToEntity(character.MicObject, player, "IK_R_Hand", new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+                player.ToggleAttachment("MicObject", false);
                 return;
             }
             NAPI.Notification.SendNotificationToPlayer(player, "You are no longer speaking through a microphone.");
             NAPI.Data.SetEntityData(player, "MicStatus", false);
-            if (character.MicObject != null && NAPI.Entity.DoesEntityExist(character.MicObject))
-                NAPI.Entity.DeleteEntity(character.MicObject);
-            character.MicObject = null;
+            player.ToggleAttachment("MicObject", true);
         }
 
         [Command("givemic"), Help(HelpManager.CommandGroups.LSNN, "Give a microphone to a player.", new[] { "The target player ID." })]

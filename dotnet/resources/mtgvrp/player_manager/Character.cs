@@ -344,16 +344,7 @@ namespace mtgvrp.player_manager
         public DateTime NextHotWire;
 
         [BsonIgnore]
-        public Object MegaPhoneObject = null;
-
-        [BsonIgnore]
-        public Object MicObject = null;
-
-        [BsonIgnore]
         public bool IsScubaDiving = false;
-
-        [BsonIgnore]
-        public Object GarbageBag = null;
 
         public enum TruckingStages
         {

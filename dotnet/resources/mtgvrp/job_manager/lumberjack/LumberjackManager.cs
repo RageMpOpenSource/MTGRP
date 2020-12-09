@@ -235,7 +235,7 @@ namespace mtgvrp.job_manager.lumberjack
 
                 tree.Stage = Tree.Stages.Moving;
                 tree.UpdateTreeText();
-                API.AttachEntityToEntity(tree.TreeObj, NAPI.Player.GetPlayerVehicle(player), "bodyshell", new Vector3(0, -1.5, 0.3), new Vector3(0, 0, 0));
+                // API.AttachEntityToEntity(tree.TreeObj, NAPI.Player.GetPlayerVehicle(player), "bodyshell", new Vector3(0, -1.5, 0.3), new Vector3(0, 0, 0)); //TODO: fix me
 
                 ChatManager.RoleplayMessage(player, "picks up the woods into the truck.", ChatManager.RoleplayMe);
 

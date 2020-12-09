@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 
-namespace Server.Extensions
+namespace mtgvrp.attachment_manager
 {
     /// <summary>
     /// Thanks to DasNiels for providing Efficient Attachment Sync C#

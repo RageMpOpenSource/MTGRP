@@ -10,6 +10,7 @@ using mtgvrp.player_manager;
 using mtgvrp.weapon_manager;
 using mtgvrp.core.Help;
 using Color = mtgvrp.core.Color;
+using mtgvrp.attachment_manager;
 
 namespace mtgvrp.group_manager.lspd
 {
@@ -18,11 +19,7 @@ namespace mtgvrp.group_manager.lspd
         [ServerEvent(Event.PlayerDisconnected)]
         public void OnPlayerDisconnected(Player player, byte type, string reason)
         {
-            var character = player.GetCharacter();
-            if (character == null) return;
-
-            if (character.MegaPhoneObject != null && NAPI.Entity.DoesEntityExist(character.MegaPhoneObject))
-                NAPI.Entity.DeleteEntity(character.MegaPhoneObject);
+            player.ToggleAttachment("MegaPhoneObject", true);
         }
 
         //LSPD Locations. TODO: MAKE IT WORK WITH MARKERZONE!!!!
@@ -698,15 +695,12 @@ namespace mtgvrp.group_manager.lspd
             {
                 NAPI.Notification.SendNotificationToPlayer(player, "You are speaking through a megaphone", true);
                 NAPI.Data.SetEntityData(player, "MegaphoneStatus", true);
-                character.MegaPhoneObject = NAPI.Object.CreateObject(NAPI.Util.GetHashKey("prop_megaphone_01"), playerPos, new Vector3());
-                API.AttachEntityToEntity(character.MegaPhoneObject, player, "IK_R_Hand", new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+                player.ToggleAttachment("MegaPhoneObject", false);
                 return;
             }
             NAPI.Notification.SendNotificationToPlayer(player, "You are no longer speaking through a megaphone.");
             NAPI.Data.SetEntityData(player, "MegaphoneStatus", false);
-            if(character.MegaPhoneObject != null && NAPI.Entity.DoesEntityExist(character.MegaPhoneObject))
-                NAPI.Entity.DeleteEntity(character.MegaPhoneObject);
-            character.MegaPhoneObject = null;
+            player.ToggleAttachment("MegaPhoneObject", true);
         }
 
 

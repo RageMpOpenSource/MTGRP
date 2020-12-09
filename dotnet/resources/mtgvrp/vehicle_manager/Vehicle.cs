@@ -302,8 +302,7 @@ namespace mtgvrp.vehicle_manager
                 if (this.Job?.Type == JobManager.JobTypes.Garbageman)
                 {
                     this.Label = API.Shared.CreateTextLabel("~g~" + $"Garbage Bags\n{this.GarbageBags}/10", API.Shared.GetEntityPosition(this.Entity), 25f, 0.5f, 1, new GTANetworkAPI.Color(1, 1, 1), true, dimension:(uint)API.Shared.GetEntityDimension(this.Entity));
-                    API.Shared.AttachEntityToEntity(this.Label, this.Entity, "tipper", new Vector3(0, 0, 0), new Vector3(0, 0, 0));
-
+                    // API.Shared.AttachEntityToEntity(this.Label, this.Entity, "tipper", new Vector3(0, 0, 0), new Vector3(0, 0, 0)); //TODO: fix atatching text labels
                 }
             }
         }

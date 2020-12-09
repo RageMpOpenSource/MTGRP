@@ -68,7 +68,7 @@ namespace mtgvrp.player_manager.player_list
         [RemoteEvent("player_list_spectate")]
         public void PlayerListSpectate(Player player, params object[] arguments)
         {
-            AdminCommands.spec_cmd(player, Convert.ToString(arguments[0]));
+            // AdminCommands.spec_cmd(player, Convert.ToString(arguments[0]));
         }
 
         [RemoteEvent("player_list_kick")]
