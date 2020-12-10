@@ -23,9 +23,6 @@ namespace mtgvrp.job_manager.taxi
             Character character = player.GetCharacter();
             var veh = VehicleManager.GetVehFromNetHandle(NAPI.Player.GetPlayerVehicle(player));
 
-            if (veh == null)
-                return;
-
             if (character?.JobOne?.Type != JobManager.JobTypes.Mechanic)
             {
                 NAPI.Notification.SendPictureNotificationToPlayer(player, "You must be a mechanic to use this command.", "CHAR_BLOCKED", 0, 0, "Server", "~r~Command Error");

@@ -127,7 +127,7 @@ namespace mtgvrp.vehicle_manager.modding
         [ServerEvent(Event.ResourceStart)]
         public void OnResourceStart()
         {
-            //VehicleInfo.Setup(Path.Combine(API.GetResourceFolder(), @"vehicle_manager/modding/modinfo"));
+            VehicleInfo.Setup(Path.Combine(NAPI.Resource.GetResourceFolder(this), @"vehicle_manager/modding/modinfo"));
         }
 
         void AddVehicleMod(GameVehicle veh, int type, string mod)

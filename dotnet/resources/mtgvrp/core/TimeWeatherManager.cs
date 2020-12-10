@@ -67,7 +67,12 @@ namespace mtgvrp.core
                     Hours = 0;
                 }
             }
-            NAPI.World.SetTime(Hours, Minutes, 0);
+
+            NAPI.Task.Run(() =>
+            {
+                NAPI.World.SetTime(Hours, Minutes, 0);
+            });
+            
 
             //Update weather
             /*if (_elapsedMinutes >= 30)

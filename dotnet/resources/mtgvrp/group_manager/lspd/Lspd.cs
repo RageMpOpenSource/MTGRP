@@ -17,7 +17,7 @@ namespace mtgvrp.group_manager.lspd
     public class Lspd : Script
     {
         [ServerEvent(Event.PlayerDisconnected)]
-        public void OnPlayerDisconnected(Player player, byte type, string reason)
+        public void OnPlayerDisconnected(Player player, DisconnectionType type, string reason)
         {
             player.ToggleAttachment("MegaPhoneObject", true);
         }

@@ -33,6 +33,7 @@ using mtgvrp.dmv;
 using mtgvrp.vehicle_manager.modding;
 using Color = mtgvrp.core.Color;
 using System.Threading.Tasks;
+using VehicleInfoLoader;
 
 namespace mtgvrp.vehicle_manager
 {
@@ -282,14 +283,17 @@ namespace mtgvrp.vehicle_manager
 
         private void VehicleRespawnTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            foreach (var x in Vehicles)
+            NAPI.Task.Run(() =>
             {
-                if (x.IsSpawned && NAPI.Vehicle.GetVehicleOccupants(x.Entity).Count == 0 && x.OwnerId == 0 && x.LastOccupied != new DateTime() && (DateTime.Now - x.LastOccupied) >= x.RespawnDelay)
+                foreach (var x in Vehicles)
                 {
-                    x.LastOccupied = new DateTime();
-                    respawn_vehicle(x);
+                    if (x.IsSpawned && NAPI.Vehicle.GetVehicleOccupants(x.Entity).Count == 0 && x.OwnerId == 0 && x.LastOccupied != new DateTime() && (DateTime.Now - x.LastOccupied) >= x.RespawnDelay)
+                    {
+                        x.LastOccupied = new DateTime();
+                        respawn_vehicle(x);
+                    }
                 }
-            }
+            });
         }
 
         /*
@@ -662,7 +666,7 @@ namespace mtgvrp.vehicle_manager
         }
 
         [ServerEvent(Event.PlayerDisconnected)]
-        public void OnPlayerDisconnected(Player player, byte type, string reason)
+        public void OnPlayerDisconnected(Player player, DisconnectionType type, string reason)
         {
             //DeSpawn his cars.
             Character character = player.GetCharacter();
@@ -929,8 +933,9 @@ namespace mtgvrp.vehicle_manager
             //Install modifications.
             ModdingManager.ApplyVehicleMods(veh);
 
-            //Set wheel type. TODO: ERROR
-            //API.SetVehicleWheelType(veh.Entity, VehicleInfo.Get(veh.VehModel).wheelType);
+            //Set wheel type.
+            NAPI.Vehicle.SetVehicleWheelType(veh.Entity, VehicleInfo.Get(veh.VehModel).wheelType);
+
             return returnCode;
         }
 

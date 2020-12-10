@@ -22,7 +22,7 @@ namespace mtgvrp.job_manager.trucker
         private const int PermittedDistance = 150;
 
         [ServerEvent(Event.PlayerDisconnected)]
-        public void OnPlayerDisconnected(Player player, byte type, string reason)
+        public void OnPlayerDisconnected(Player player, DisconnectionType type, string reason)
         {
             Character c = player.GetCharacter();
 

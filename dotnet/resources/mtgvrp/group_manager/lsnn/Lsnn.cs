@@ -14,7 +14,7 @@ namespace mtgvrp.group_manager.lsnn
     class Lsnn : Script
     {
         [ServerEvent(Event.PlayerDisconnected)]
-        public void OnPlayerDisconnected(Player player, byte type, string reason)
+        public void OnPlayerDisconnected(Player player, DisconnectionType type, string reason)
         {
             var character = player.GetCharacter();
             if (character == null) return;

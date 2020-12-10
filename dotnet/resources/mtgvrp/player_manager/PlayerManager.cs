@@ -164,7 +164,7 @@ namespace mtgvrp.player_manager
         }
 
         [ServerEvent(Event.PlayerDisconnected)]
-        public void OnPlayerDisconnected(Player player, byte type, string reason)
+        public void OnPlayerDisconnected(Player player, DisconnectionType type, string reason)
         {
             //Save data
             Character character = player.GetCharacter();

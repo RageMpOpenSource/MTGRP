@@ -1,8 +1,7 @@
 using System.Timers;
 
 using GTANetworkAPI;
-
-
+using GTANetworkMethods;
 using mtgvrp.core;
 using mtgvrp.inventory;
 using mtgvrp.player_manager;
@@ -10,6 +9,8 @@ using mtgvrp.property_system;
 using mtgvrp.vehicle_manager;
 using GameVehicle = mtgvrp.vehicle_manager.GameVehicle;
 using mtgvrp.core.Help;
+using Player = GTANetworkAPI.Player;
+using Vehicle = GTANetworkAPI.Vehicle;
 
 namespace mtgvrp.speed_fuel_system
 {
@@ -37,29 +38,32 @@ namespace mtgvrp.speed_fuel_system
 
         private void FuelTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            foreach (var veh in VehicleManager.Vehicles)
+            NAPI.Task.Run(() =>
             {
-                if (!veh.IsSpawned) continue;
-                if (NAPI.Vehicle.GetVehicleEngineStatus(veh.Entity) != true || veh.Fuel <= 0) continue;
-                if (API.Shared.GetVehicleClass(veh.VehModel) == 13) continue; //Skip cycles
-                
-                var ocups = NAPI.Vehicle.GetVehicleOccupants(veh.Entity);
-
-                //Reduce fuel by one.
-                veh.Fuel -= 1;
-                if (veh.Fuel <= 0)
+                foreach (var veh in VehicleManager.Vehicles)
                 {
-                    NAPI.Vehicle.SetVehicleEngineStatus(veh.Entity, false);
+                    if (!veh.IsSpawned) continue;
+                    if (NAPI.Vehicle.GetVehicleEngineStatus(veh.Entity) != true || veh.Fuel <= 0) continue;
+                    if (API.Shared.GetVehicleClass(veh.VehModel) == 13) continue; //Skip cycles
+                    
+                    var ocups = NAPI.Vehicle.GetVehicleOccupants(veh.Entity);
+
+                    //Reduce fuel by one.
+                    veh.Fuel -= 1;
+                    if (veh.Fuel <= 0)
+                    {
+                        NAPI.Vehicle.SetVehicleEngineStatus(veh.Entity, false);
+                        if (ocups.Count > 0)
+                            NAPI.Chat.SendChatMessageToPlayer(NAPI.Player.GetPlayerFromHandle(ocups[0]), "~y~The vehicle fuel has finished.");
+                    }
+
+                    //Notify driver with loss of fuel.
                     if (ocups.Count > 0)
-                        NAPI.Chat.SendChatMessageToPlayer(NAPI.Player.GetPlayerFromHandle(ocups[0]), "~y~The vehicle fuel has finished.");
+                    {
+                        NAPI.ClientEvent.TriggerClientEvent(NAPI.Player.GetPlayerFromHandle(ocups[0]), "fuel_updatevalue", veh.Fuel);
+                    }
                 }
-
-                //Notify driver with loss of fuel.
-                if (ocups.Count > 0)
-                {
-                    NAPI.ClientEvent.TriggerClientEvent(NAPI.Player.GetPlayerFromHandle(ocups[0]), "fuel_updatevalue", veh.Fuel);
-                }
-            }
+            });
         }
 
         [Command("togspeedo"), Help(HelpManager.CommandGroups.Vehicles, "Used to find your character statistics", null)]

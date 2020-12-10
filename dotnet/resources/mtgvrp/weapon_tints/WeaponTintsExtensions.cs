@@ -50,6 +50,13 @@ namespace mtgvrp.weapon_tints
 
     public class WeaponTintsScript : Script
     {
+        private string encode(uint nIn, uint nBase)
+        {
+            uint n = nIn / nBase;
+            char c = "0123456789abcdefghijklmnopqrstuvwxyz"[(int) (nIn % nBase)];
+            return n > 0 ? encode(n, nBase) + c : c.ToString();
+        }
+
         [ServerEvent(Event.PlayerWeaponSwitch)]
         public void OnPlayerWeaponSwitch(Player player, WeaponHash oldWeapon, WeaponHash newWeapon)
         {
@@ -57,7 +64,7 @@ namespace mtgvrp.weapon_tints
                 player.SetData("weaponTints", new Dictionary<uint, int>());
             Dictionary<uint, int> currentTints = player.GetData<Dictionary<uint, int>>("weaponTints");
             int tint = currentTints.ContainsKey((uint)newWeapon) ? currentTints[(uint)newWeapon] : 0;
-            player.SetSharedData("currentWeaponTint", $"{Convert.ToString((uint)newWeapon, 36)}|{tint}");
+            player.SetSharedData("currentWeaponTint", $"{encode((uint)newWeapon, 36)}|{tint}");
         }
     }
 }

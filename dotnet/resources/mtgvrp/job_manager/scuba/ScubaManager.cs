@@ -178,7 +178,7 @@ namespace mtgvrp.job_manager.scuba
         private readonly List<GTANetworkAPI.Object> _treasureObjects = new List<GTANetworkAPI.Object>();
 
         [ServerEvent(Event.PlayerDisconnected)]
-        public void API_onPlayerDisconnected(Player player, byte type, string reason)
+        public void API_onPlayerDisconnected(Player player, DisconnectionType type, string reason)
         {
             Character c = player.GetCharacter();
 

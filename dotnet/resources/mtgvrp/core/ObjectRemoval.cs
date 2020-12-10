@@ -11,19 +11,22 @@ namespace mtgvrp.core
         {
             _timer = new Timer((state) =>
             {
-                foreach (var player in NAPI.Pools.GetAllPlayers())
+                NAPI.Task.Run(() =>
                 {
-                    if (player == null)
-                        continue;
-
-                    foreach (var obj in _objects)
+                    foreach (var player in NAPI.Pools.GetAllPlayers())
                     {
-                        if (player.Position.DistanceTo(obj[0]) <= 175.0f)
+                        if (player == null)
+                            continue;
+
+                        foreach (var obj in _objects)
                         {
-                            NAPI.Player.DeletePlayerWorldProp(player, obj[0], obj[1], 50.0f);
+                            if (player.Position.DistanceTo(obj[0]) <= 175.0f)
+                            {
+                                NAPI.Player.DeletePlayerWorldProp(player, obj[0], obj[1], 50.0f);
+                            }
                         }
                     }
-                }
+                });
 
             }, null, 1000, 1000);
         }

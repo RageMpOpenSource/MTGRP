@@ -18,7 +18,7 @@ namespace mtgvrp.job_manager.garbageman
     public class Garbageman : Script
     {
         [ServerEvent(Event.PlayerDisconnected)]
-        public void OnPlayerDisconnected(Player player, byte type, string reason)
+        public void OnPlayerDisconnected(Player player, DisconnectionType type, string reason)
         {
             player.ToggleAttachment("GarbageBag", true);
         }

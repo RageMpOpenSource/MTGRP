@@ -32,7 +32,7 @@ namespace mtgvrp.job_manager.taxi
         public static List<Character> TaxiRequests = new List<Character>();
 
         [ServerEvent(Event.PlayerDisconnected)]
-        public void OnPlayerDisconnected(Player player, byte type, string reason)
+        public void OnPlayerDisconnected(Player player, DisconnectionType type, string reason)
         {
             var c = player.GetCharacter();
             if (c == null)
