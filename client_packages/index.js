@@ -1,3 +1,6 @@
+const nativeui = require('nativeui');
+require('GetUserInputAsync.js');
+
 require('core/AttachmentManager.js');
 require('core/WeaponTints.js');
 // require('rp_scripts/BankMenu.js');
@@ -5,7 +8,7 @@ require('player_manager/PlayerManager.js');
 // require('player_manager/player_interaction/PlayerInteraction.js');
 // require('player_manager/player_list/PlayerList.js');
 require('player_manager/login/LoginManager.js');
-// require('player_manager/CharacterMenu.js');
+require('player_manager/CharacterMenu.js');
 // require('player_manager/Introduction.js');
 // require('job_manager/JobManager.js');
 // require('job_manager/taxi/TaxiJob.js');

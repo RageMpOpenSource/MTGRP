@@ -1,13 +1,12 @@
-﻿var menu_pool = null;
-var character_menu = null;
+﻿var character_menu = null;
 var character_creation_menu = null;
 
 var gender = 0;
 
 var MAX_HAIR_STYLE = 0;
-var MAX_HAIR_COLORS = API.returnNative("_GET_NUM_HAIR_COLORS", 0);
+var MAX_HAIR_COLORS = mp.game.invoke("_GET_NUM_HAIR_COLORS", 0);
 
-var MAX_MAKEUP_COLORS = API.returnNative("_GET_NUM_MAKEUP_COLORS", 0);
+var MAX_MAKEUP_COLORS = mp.game.invoke("_GET_NUM_MAKEUP_COLORS", 0);
 var MAX_BLUSH_COLORS = 33;
 var MAX_LIPSTICK_COLORS = 27;
 
@@ -37,174 +36,179 @@ var glasses_list = [];
 var ears_list = [];
 
 //Create the camera view to watch character creation
-var creation_view = API.createCamera(new Vector3(403, -999.5, -98), new Vector3(0, 0, -15));
-API.pointCameraAtPosition(creation_view, new Vector3(403, -998, -98.5));
+var creation_view = mp.cameras.new('default', new mp.Vector3(403, -999.5, -98), new mp.Vector3(0, 0, -15), 40);
+creation_view.pointAtCoord(403, -998, -98.5);
 
-var facial_view = API.createCamera(new Vector3(403, -998, -98.2), new Vector3(0, 0, -15));
+var facial_view = mp.cameras.new('default', new mp.Vector3(403, -998, -98.2), new mp.Vector3(0, 0, -15), 40);
 
-Event.OnServerEventTrigger.connect(function (eventName, args) {
-    if (eventName == "showCharacterSelection") {
-        var player = API.getLocalPlayer();
-        menu_pool = API.getMenuPool();
+mp.events.add('showCharacterSelection', () => {
+    var player = mp.players.local;
 
-        character_menu = API.createMenu("Character Selection", "Select a character below", -200, 75, 4);
+    character_menu = new nativeui.Menu("Character Selection", "Select a character below", new mp.Vector3(-200, 75, 4));
 
-        var char_count = API.getEntitySyncedData(player, "char_count");
+    var char_count = player.getVariable("char_count");
 
-        for (var i = 0; i < char_count; i++) {
-            var menu_item = API.createMenuItem(API.getEntitySyncedData(player, "char_name_" + i), API.getEntitySyncedData(player, "char_info_" + i));
-            character_menu.AddItem(menu_item);
-        }
+    for (var i = 0; i < char_count; i++) {
+        var menu_item = new nativeui.UIMenuItem(player.getVariable("char_name_" + i), player.getVariable("char_info_" + i));
+        character_menu.AddItem(menu_item);
+    }
 
-        menu_pool.Add(character_menu);
-        character_menu.Visible = true;
-        character_menu.CurrentSelection = 0;
+    character_menu.Open();
+    character_menu.CurrentSelection = 0;
 
-        character_menu.OnItemSelect.connect(function (sender, item, index) {
-            if (item.Text == "Create new character") {
-	            API.SendChatMessage("* Enter your desired character name: ");
-                
-				var res = false;
-				while (res === false) {
-					API.SendChatMessage("Character name must be similar to: ~g~John_Doe~w~.");
-                    var desiredName = API.getUserInput("", 64);
-				    if (desiredName === "")
-				        return;
-					var patt = new RegExp("^[A-Z][a-zA-Z]+_[A-Z][a-zA-Z]+$");
-					res = patt.test(desiredName);
-				}
-				API.triggerServerEvent("OnCharacterMenuSelect", item.Text, desiredName);
+    character_menu.ItemSelect.on(async (item, index) => {
+        if (item.Text == "Create new character") {
+            mp.gui.chat.push("* Enter your desired character name: ");
+            
+            var res = false;
+            while (res === false) {
+                mp.gui.chat.push("Character name must be similar to: ~g~John_Doe~w~.");
+                var desiredName = await getUserInputAsync({
+                    title: 'Enter your desired character name',
+                    maxLength: 64,
+                    showMaxLength: true
+                });
+                if (desiredName === "")
+                    return;
+                var patt = new RegExp("^[A-Z][a-zA-Z]+_[A-Z][a-zA-Z]+$");
+                res = patt.test(desiredName);
             }
-            else {
-                API.triggerServerEvent("OnCharacterMenuSelect", item.Text);
-            }
+            mp.events.callRemote("OnCharacterMenuSelect", item.Text, desiredName);
+        }
+        else {
+            mp.events.callRemote("OnCharacterMenuSelect", item.Text);
+        }
 
-        });
-    } else if (eventName == "show_character_creation_menu") {
-        var player = API.getLocalPlayer();
-        API.setEntityDimension(player, getRandomInt(1, 5000));
-        next_character_creation_step(player, 0);
+    });
+});
+
+mp.events.add('show_character_creation_menu', () => {
+    var player = API.getLocalPlayer();
+    API.setEntityDimension(player, getRandomInt(1, 5000));
+    next_character_creation_step(player, 0);
+});
+
+mp.events.add('login_finished', () => {
+    character_menu.Visible = false;
+    menu_pool = null;
+});
+
+mp.events.add('initialize_hair', () => {
+    MAX_HAIR_STYLE = args[0];
+    hair_list = new List(String);
+    hair_ids_list = new List(String);
+    var hair_array = args[1].split(",");
+    var hair_ids_array = args[2].split(",");
+    for (var i = 0; i < hair_array.length; i++)
+    {
+        hair_list.Add(hair_array[i]);
     }
-    else if (eventName == "login_finished") {
-        character_menu.Visible = false;
-		menu_pool = null;
+    for(var i = 0; i < hair_ids_array.length; i++)
+    {
+        hair_ids_list.Add(hair_ids_array[i]);
     }
-    else if (eventName == "initialize_hair") {
-        MAX_HAIR_STYLE = args[0];
-        hair_list = new List(String);
-        hair_ids_list = new List(String);
-        var hair_array = args[1].split(",");
-        var hair_ids_array = args[2].split(",");
-        for (var i = 0; i < hair_array.length; i++)
-        {
-            hair_list.Add(hair_array[i]);
-        }
-        for(var i = 0; i < hair_ids_array.length; i++)
-        {
-            hair_ids_list.Add(hair_ids_array[i]);
-        }
+});
+
+mp.events.add('initialize_components', () => {
+    var list = JSON.parse(args[0]);
+
+    var newList = JSON.parse(list["Legs"]);
+    for (var a = 0; a < newList.length; a++) {
+
+        var component = new Component();
+        component.name = newList[a][0];
+        component.id = newList[a][1];
+        component.variations = JSON.parse(newList[a][2]);
+
+        legs_list.push(component);
     }
-    else if (eventName == "initialize_components") {
-       
-        var list = JSON.parse(args[0]);
 
-        var newList = JSON.parse(list["Legs"]);
-        for (var a = 0; a < newList.length; a++) {
+    newList = JSON.parse(list["Shoes"]);
+    for (var a = 0; a < newList.length; a++) {
 
-            var component = new Component();
-            component.name = newList[a][0];
-            component.id = newList[a][1];
-            component.variations = JSON.parse(newList[a][2]);
+        var component = new Component();
+        component.name = newList[a][0];
+        component.id = newList[a][1];
+        component.variations = JSON.parse(newList[a][2]);
 
-            legs_list.push(component);
-        }
+        shoes_list.push(component);
+    }
 
-        newList = JSON.parse(list["Shoes"]);
-        for (var a = 0; a < newList.length; a++) {
+    newList = JSON.parse(list["Accessories"]);
+    for (var a = 0; a < newList.length; a++) {
 
-            var component = new Component();
-            component.name = newList[a][0];
-            component.id = newList[a][1];
-            component.variations = JSON.parse(newList[a][2]);
+        var component = new Component();
+        component.name = newList[a][0];
+        component.id = newList[a][1];
+        component.variations = JSON.parse(newList[a][2]);
 
-            shoes_list.push(component);
-        }
+        access_list.push(component);
+    }
 
-        newList = JSON.parse(list["Accessories"]);
-        for (var a = 0; a < newList.length; a++) {
+    newList = JSON.parse(list["Undershirts"]);
+    for (var a = 0; a < newList.length; a++) {
 
-            var component = new Component();
-            component.name = newList[a][0];
-            component.id = newList[a][1];
-            component.variations = JSON.parse(newList[a][2]);
+        var component = new Component();
+        component.name = newList[a][0];
+        component.id = newList[a][1];
+        component.variations = JSON.parse(newList[a][2]);
 
-            access_list.push(component);
-        }
+        undershits_list.push(component);
+    }
 
-        newList = JSON.parse(list["Undershirts"]);
-        for (var a = 0; a < newList.length; a++) {
+    newList = JSON.parse(list["Tops"]);
+    for (var a = 0; a < newList.length; a++) {
 
-            var component = new Component();
-            component.name = newList[a][0];
-            component.id = newList[a][1];
-            component.variations = JSON.parse(newList[a][2]);
+        var component = new Component();
+        component.name = newList[a][0];
+        component.id = newList[a][1];
+        component.variations = JSON.parse(newList[a][2]);
 
-            undershits_list.push(component);
-        }
+        tops_list.push(component);
+    }
 
-        newList = JSON.parse(list["Tops"]);
-        for (var a = 0; a < newList.length; a++) {
+    newList = JSON.parse(list["Hats"]);
+    for (var a = 0; a < newList.length; a++) {
 
-            var component = new Component();
-            component.name = newList[a][0];
-            component.id = newList[a][1];
-            component.variations = JSON.parse(newList[a][2]);
+        var component = new Component();
+        component.name = newList[a][0];
+        component.id = newList[a][1];
+        component.variations = JSON.parse(newList[a][2]);
 
-            tops_list.push(component);
-        }
+        hats_list.push(component);
+    }
 
-        newList = JSON.parse(list["Hats"]);
-        for (var a = 0; a < newList.length; a++) {
+    newList = JSON.parse(list["Glasses"]);
+    for (var a = 0; a < newList.length; a++) {
 
-            var component = new Component();
-            component.name = newList[a][0];
-            component.id = newList[a][1];
-            component.variations = JSON.parse(newList[a][2]);
+        var component = new Component();
+        component.name = newList[a][0];
+        component.id = newList[a][1];
+        component.variations = JSON.parse(newList[a][2]);
 
-            hats_list.push(component);
-        }
+        glasses_list.push(component);
+    }
 
-        newList = JSON.parse(list["Glasses"]);
-        for (var a = 0; a < newList.length; a++) {
+    newList = JSON.parse(list["Ears"]);
+    for (var a = 0; a < newList.length; a++) {
 
-            var component = new Component();
-            component.name = newList[a][0];
-            component.id = newList[a][1];
-            component.variations = JSON.parse(newList[a][2]);
+        var component = new Component();
+        component.name = newList[a][0];
+        component.id = newList[a][1];
+        component.variations = JSON.parse(newList[a][2]);
 
-            glasses_list.push(component);
-        }
-
-        newList = JSON.parse(list["Ears"]);
-        for (var a = 0; a < newList.length; a++) {
-
-            var component = new Component();
-            component.name = newList[a][0];
-            component.id = newList[a][1];
-            component.variations = JSON.parse(newList[a][2]);
-
-            ears_list.push(component);
-        }
+        ears_list.push(component);
     }
 });
 
 
-Event.OnUpdate.connect(function () {
+//TODO find alternative
+/* Event.OnUpdate.connect(function () {
     if (menu_pool != null) {
         menu_pool.ProcessMenus();
 		API.disableAllControlsThisFrame();
     }
-});
+}); */
 
 var pant_menu = null;
 var shoe_menu = null;
