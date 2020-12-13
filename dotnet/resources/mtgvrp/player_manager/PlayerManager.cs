@@ -321,46 +321,49 @@ namespace mtgvrp.player_manager
         private Timer _payCheckTimer;
         private void _payCheckTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            foreach (var player in Players.Select(x => x.Player))
+            NAPI.Task.Run(() =>
             {
-                Character character = player.GetCharacter();
-                if (!API.Shared.IsPlayerConnected(player))
+                foreach (var player in Players.Select(x => x.Player))
                 {
-                    LogManager.Log(LogManager.LogTypes.Connection, $"ERROR: PLAYER {character.CharacterName} IS NOT LOGGED IN WHILE IN LIST");
-                    continue;
-                }
-
-                if (character?.GetTimePlayed() % 3600 == 0 && character.TimePlayed > 0)
-                {
-                    int paycheckAmount = CalculatePaycheck(player);
-                    character.BankBalance += paycheckAmount;
-                    Properties.Settings.governmentbalance += paycheckAmount * taxationAmount / 100;
-                    player.SendChatMessage("--------------PAYCHECK RECEIVED!--------------");
-                    player.SendChatMessage("Base paycheck: $" + basepaycheck + ".");
-                    player.SendChatMessage("Interest: $" + character.BankBalance / 1000 + ".");
-                    player.SendChatMessage("You were taxed at " + taxationAmount + "%.");
-                    //player.SendChatMessage("VIP bonus: " + getVIPPaycheckBonus(player) + "%.");
-                    player.SendChatMessage("Faction bonus: $" + getFactionBonus(player) + ".");
-                    player.SendChatMessage("----------------------------------------------");
-                    player.SendChatMessage("Total: ~g~$" + paycheckAmount + "~w~.");
-
-                    player.SendPictureNotificationToPlayer("Your paycheck for ~g~$" + paycheckAmount + " ~w~has been added to your balance.", "CHAR_BANK_MAZE", 0, 0, "Maze Bank", "Paycheck Received!");
-                    Account account = player.GetAccount();
-                    if (account.VipLevel > 0 && account.AdminLevel < 1)
+                    Character character = player.GetCharacter();
+                    if (!API.Shared.IsPlayerConnected(player))
                     {
-                        if (account.VipExpirationDate < DateTime.Now)
-                        {
-                            player.SendChatMessage(
-                                "Your ~y~VIP~w~ subscription has ran out. Visit www.mt-gaming.com to renew your subscription.");
-                            account.VipLevel = 0;
-                        }
+                        LogManager.Log(LogManager.LogTypes.Connection, $"ERROR: PLAYER {character.CharacterName} IS NOT LOGGED IN WHILE IN LIST");
+                        continue;
                     }
 
-                    account.TotalPlayingHours++;
-                    account.Save();
-                    character.Save();
+                    if (character?.GetTimePlayed() % 3600 == 0 && character.TimePlayed > 0)
+                    {
+                        int paycheckAmount = CalculatePaycheck(player);
+                        character.BankBalance += paycheckAmount;
+                        Properties.Settings.governmentbalance += paycheckAmount * taxationAmount / 100;
+                        player.SendChatMessage("--------------PAYCHECK RECEIVED!--------------");
+                        player.SendChatMessage("Base paycheck: $" + basepaycheck + ".");
+                        player.SendChatMessage("Interest: $" + character.BankBalance / 1000 + ".");
+                        player.SendChatMessage("You were taxed at " + taxationAmount + "%.");
+                        //player.SendChatMessage("VIP bonus: " + getVIPPaycheckBonus(player) + "%.");
+                        player.SendChatMessage("Faction bonus: $" + getFactionBonus(player) + ".");
+                        player.SendChatMessage("----------------------------------------------");
+                        player.SendChatMessage("Total: ~g~$" + paycheckAmount + "~w~.");
+
+                        player.SendPictureNotificationToPlayer("Your paycheck for ~g~$" + paycheckAmount + " ~w~has been added to your balance.", "CHAR_BANK_MAZE", 0, 0, "Maze Bank", "Paycheck Received!");
+                        Account account = player.GetAccount();
+                        if (account.VipLevel > 0 && account.AdminLevel < 1)
+                        {
+                            if (account.VipExpirationDate < DateTime.Now)
+                            {
+                                player.SendChatMessage(
+                                    "Your ~y~VIP~w~ subscription has ran out. Visit www.mt-gaming.com to renew your subscription.");
+                                account.VipLevel = 0;
+                            }
+                        }
+
+                        account.TotalPlayingHours++;
+                        account.Save();
+                        character.Save();
+                    }
                 }
-            }
+            });
         }
 
         [Command("getid", GreedyArg = true, Alias = "id"), Help(HelpManager.CommandGroups.General, "Used to find the ID of specific player name.", new [] {"Name of the target character. (Partial name accepted)"})]
