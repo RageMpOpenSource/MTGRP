@@ -11,6 +11,6 @@ The script was originally targeting GTA:Network.
 - Laheem
 - Kroma
 
-You can view a full list of developers here: https://github.com/Battlerax/MTGRP/graphs/contributors
+You can view a full list of developers here: https://github.com/RageMpOpenSource/MTGRP/graphs/contributors
 
 ## This release is covered by the MIT License agreement. 
