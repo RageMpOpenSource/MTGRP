@@ -5,12 +5,11 @@ This is a public release of the Moving Target Gaming Roleplay script... This scr
 The script was originally targeting GTA:Network.
 
 ## Important Contributors
-- Ahmad45123 (MTGRP Developer)
-- AlexanderNorton (MTGRP Developer)
-- Chenkers (MTGRP Developer)
-- Laheem (MTGRP Developer)
-- Carbowix / Captien (Mafia City Roleplay Developer)
-- Battlerax / Austin (Mafia City Roleplay Developer)
+- Ahmad45123
+- AlexanderNorton
+- Chenkers
+- Laheem
+- Kroma
 
 You can view a full list of developers here: https://github.com/Battlerax/MTGRP/graphs/contributors
 
